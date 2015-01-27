@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      height: 100%;
+      position: relative;
+    }
+
+    iframe {
+      display: none;
+      border: 0 none;
+    }
+
+    .active {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    form {
+      padding: 50px;
+    }
+    input {
+      width: 400px;
+    }
+  </style>
+</head>
+<body>
+<form>
+  <p><label>URL 1:</label> <input value="http://www.gov.uk/performance/carers-allowance"/></p>
+  <p><label>URL 2:</label> <input value="http://www.gov.uk/performance/prison-visits"/></p>
+  <p><label>URL 3:</label> <input value=""/></p>
+  <p><label>URL 4:</label> <input value=""/></p>
+  <p><label>URL 5:</label> <input value=""/></p>
+  <p><label>URL 6:</label> <input value=""/></p>
+  <p><label>URL 7:</label> <input value=""/></p>
+  <button>Start</button>
+</form>
+<div class="container"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+  var urls = [],
+      html = '',
+      active;
+
+  $('form').on('submit', function(e) {
+    e.preventDefault();
+    $(this).find('input').each(function() {
+      if ($(this).val()) {
+        urls.push($(this).val());
+      }
+    });
+    for (var i = 0, j = urls.length; i < j; i++) {
+      active = (i === 0) ? ' active' : '';
+      html += '<iframe class="slide' + i + active + '" src="' + urls[i] + '"></iframe>';
+    }
+    document.querySelector('.container').innerHTML = html;
+    document.querySelector('.active').webkitRequestFullScreen();
+    $('form').hide();
+    var slide = 0;
+
+    setInterval(function () {
+      document.querySelector('.slide' + slide).classList.remove('active');
+      slide = (slide < j - 1) ? slide + 1 : 0;
+      document.querySelector('.slide' + slide).classList.add('active');
+    }, 10000);
+  });
+
+</script>
+</body>
+</html>
